@@ -1,0 +1,31 @@
+generator db {
+  provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DSN")
+}
+
+model Pair {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  base      String   @db.VarChar(10)
+  quote     String   @db.VarChar(10)
+  Kline     Kline[]
+}
+
+model Kline {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  pair      Pair     @relation(fields: [pairId], references: [id])
+  published Boolean  @default(false)
+  desc      String?
+  pairId    String
+}
+
+enum ValidPair {
+  BTCUSDT
+  ETHUSDT
+  XRPUSDT
+}
