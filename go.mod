@@ -1,4 +1,4 @@
-module example.com/trading
+module github.com/0xSmartCrypto/binance-websocket-feed-go
 
 go 1.20
 

@@ -7,5 +7,5 @@ import (
 )
 
 func XrpUsdt (kline *binance.WsKline) {
-	fmt.Println("XRPUSDT here", kline)
+	fmt.Println("XRPUSDT received")
 }

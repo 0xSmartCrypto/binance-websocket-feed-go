@@ -7,5 +7,5 @@ import (
 )
 
 func EthUsdt (kline *binance.WsKline) {
-	fmt.Println("ETHUSDT here", kline)
+	fmt.Println("ETHUSDT received")
 }

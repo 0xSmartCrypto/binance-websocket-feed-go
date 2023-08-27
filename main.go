@@ -3,10 +3,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"os"
 
-	"example.com/trading/pairs"
+	"github.com/0xSmartCrypto/binance-websocket-feed-go/db"
+	"github.com/0xSmartCrypto/binance-websocket-feed-go/pairs"
 	"github.com/adshao/go-binance/v2"
+	"github.com/joho/godotenv"
 )
 
 type ValidPair string
@@ -18,11 +22,31 @@ const (
 )
 
 func main() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+	fmt.Println("Environment", os.Getenv("ENV"))
+
+	client := db.NewClient()
+	if err:= client.Prisma.Connect(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	defer func() {
+    if err := client.Prisma.Disconnect(); err != nil {
+      panic(err)
+    }
+  }()
+ 
+  ctx := context.Background()
+
 	handler := func(event *binance.WsKlineEvent) {
 		if (event.Kline.IsFinal) {
 			switch (event.Symbol) {
 				case string(BTCUSDT):
-					pairs.BtcUsdt(&event.Kline)
+					pairs.BtcUsdt(&event.Kline, client, ctx)
 				case string(ETHUSDT):
 					pairs.EthUsdt(&event.Kline)
 				case string(XRPUSDT):
