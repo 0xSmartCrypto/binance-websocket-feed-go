@@ -7,5 +7,5 @@ import (
 )
 
 func BtcUsdt (kline *binance.WsKline) {
-	fmt.Println("BTCUSDT here")
+	fmt.Println("BTCUSDT here", kline)
 }

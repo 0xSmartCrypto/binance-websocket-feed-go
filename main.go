@@ -36,8 +36,17 @@ func main() {
 	}
 
 	fmt.Println("Subscribing to Binance Websocket Feed ...")
+	
+	symbolIntervalMap := make(map[string]string)
+	symbolIntervalMap[string(BTCUSDT)] = "1m"
+	symbolIntervalMap[string(ETHUSDT)] = "1m"
+	symbolIntervalMap[string(XRPUSDT)] = "1m"
 
-	doneC, _, err := binance.WsKlineServe(string(BTCUSDT), "1m", handler, errHandler)
+	doneC, _, err := binance.WsCombinedKlineServe(
+		symbolIntervalMap,
+		handler, 
+		errHandler,
+	)
 	if err != nil {
 		fmt.Println(err)
 		return
