@@ -1,3 +1,5 @@
+docker-*
+
 push-db-*
 
 .env

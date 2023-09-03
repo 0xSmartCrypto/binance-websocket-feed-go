@@ -1,6 +1,6 @@
-# Signals Aggregator
+# Feature Server 
 
-A price and signal aggregator written in Go 1.20.
+A price and feature detector written in Go 1.20.
 
 ## Installation
 
