@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Pair {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
   symbol    ValidPair
-  base      String   @db.VarChar(10)
-  quote     String   @db.VarChar(10)
+  base      String    @db.VarChar(10)
+  quote     String    @db.VarChar(10)
   Kline     Kline[]
 }
 
@@ -31,6 +31,7 @@ model Kline {
   quoteVolume         Float
   takerBuyBaseVolume  Float
   takerBuyQuoteVolume Float
+  meta                Json?
 }
 
 enum ValidPair {
