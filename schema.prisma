@@ -5,6 +5,7 @@ generator db {
 datasource db {
   provider = "mysql"
   url      = env("DSN")
+  relationMode = "prisma"
 }
 
 model Pair {
@@ -14,6 +15,9 @@ model Pair {
   base      String    @db.VarChar(10)
   quote     String    @db.VarChar(10)
   Kline     Kline[]
+
+  @@index([symbol], name: "symbol")
+  @@index([createdAt], name: "createdAt")
 }
 
 model Kline {
@@ -32,6 +36,8 @@ model Kline {
   takerBuyBaseVolume  Float
   takerBuyQuoteVolume Float
   meta                Json?
+  
+  @@index([pairId], name: "pairId")
 }
 
 enum ValidPair {
