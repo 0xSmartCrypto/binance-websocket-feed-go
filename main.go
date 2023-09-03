@@ -5,6 +5,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 
 	"github.com/0xSmartCrypto/binance-websocket-feed-go/db"
@@ -21,6 +23,11 @@ const (
 	ETHUSDT ValidPair = "ETHUSDT"
 	XRPUSDT ValidPair = "XRPUSDT"
 )
+
+func getRoot(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("got / request\n")
+	io.WriteString(w, "Up.\n")
+}
 
 func main() {
 	err := godotenv.Load(".env")
@@ -86,4 +93,12 @@ func main() {
 		return
 	}
 	<-doneC
+
+	// For cloud run, serve on port 8080
+	http.HandleFunc("/", getRoot)
+	err = http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
