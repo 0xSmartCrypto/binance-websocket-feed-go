@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/0xSmartCrypto/binance-websocket-feed-go/db"
+	"github.com/0xSmartCrypto/binance-websocket-feed-go/features"
 	"github.com/0xSmartCrypto/binance-websocket-feed-go/pairs"
 	"github.com/adshao/go-binance/v2"
 	"github.com/joho/godotenv"
@@ -42,15 +43,24 @@ func main() {
  
   ctx := context.Background()
 
+	// Feature: Calculate Volume Moving Average
+	btcBaseMA := features.VolumeMA{
+		Period: 8,
+	}
+	btcQuoteMA := features.VolumeMA{
+		Period: 8,
+	}
+	
 	handler := func(event *binance.WsKlineEvent) {
 		if (event.Kline.IsFinal) {
 			switch (event.Symbol) {
 				case string(BTCUSDT):
-					pairs.BtcUsdt(&event.Kline, client, ctx)
-				case string(ETHUSDT):
-					pairs.EthUsdt(&event.Kline)
-				case string(XRPUSDT):
-					pairs.XrpUsdt(&event.Kline)
+					fmt.Println("Seq", btcBaseMA.Sequential);
+					pairs.BtcUsdt(ctx, &event.Kline, &btcBaseMA, &btcQuoteMA, client)
+				// case string(ETHUSDT):
+				// 	pairs.EthUsdt(&event.Kline)
+				// case string(XRPUSDT):
+				// 	pairs.XrpUsdt(&event.Kline)
 			}
 		}
 	}
@@ -63,8 +73,8 @@ func main() {
 	
 	symbolIntervalMap := make(map[string]string)
 	symbolIntervalMap[string(BTCUSDT)] = "1m"
-	symbolIntervalMap[string(ETHUSDT)] = "1m"
-	symbolIntervalMap[string(XRPUSDT)] = "1m"
+	// symbolIntervalMap[string(ETHUSDT)] = "1m"
+	// symbolIntervalMap[string(XRPUSDT)] = "1m"
 
 	doneC, _, err := binance.WsCombinedKlineServe(
 		symbolIntervalMap,

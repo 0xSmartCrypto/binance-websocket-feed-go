@@ -2,22 +2,36 @@ package pairs
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"strconv"
 	"time"
 
 	"github.com/0xSmartCrypto/binance-websocket-feed-go/db"
+	"github.com/0xSmartCrypto/binance-websocket-feed-go/features"
 	"github.com/adshao/go-binance/v2"
 )
 
-func BtcUsdt (kline *binance.WsKline, client *db.PrismaClient, ctx context.Context) {
-	pairId, err := findOrCreatePair(client, ctx, db.ValidPairBtcusdt)
+type BtcFeature interface {
+	features.VolumeMA | features.SMA
+}
+
+func BtcUsdt (
+	ctx context.Context, 
+	kline *binance.WsKline, 
+	baseMA *features.VolumeMA, 
+	quoteMA *features.VolumeMA,
+	client *db.PrismaClient,
+) {
+	// Find or create pair
+	pairId, err := findOrCreatePair(ctx, client, db.ValidPairBtcusdt)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
+	// Record OHLCV
 	start := time.UnixMilli(kline.StartTime)
 	open, _ := strconv.ParseFloat(kline.Open, 64)
 	high, _ := strconv.ParseFloat(kline.High, 64)
@@ -28,6 +42,20 @@ func BtcUsdt (kline *binance.WsKline, client *db.PrismaClient, ctx context.Conte
 	numberTrades := kline.TradeNum
 	takerBuyBaseVolume, _ := strconv.ParseFloat(kline.ActiveBuyVolume, 64)
 	takerBuyQuoteVolume, _ := strconv.ParseFloat(kline.ActiveBuyQuoteVolume, 64)
+
+	// Feature: Calculate Volume Moving Average
+	baseMA.Add(baseVolume)
+	quoteMA.Add(quoteVolume)
+	
+	meta := map[string]float64{
+		"BaseVolumeMA": baseMA.Value(),
+		"QuoteVolumeMA": quoteMA.Value(),
+	}
+	metaJson, err := json.Marshal(meta)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	created, err := client.Kline.CreateOne(
 		db.Kline.Pair.Link(
@@ -43,6 +71,7 @@ func BtcUsdt (kline *binance.WsKline, client *db.PrismaClient, ctx context.Conte
 		db.Kline.QuoteVolume.Set(quoteVolume),
 		db.Kline.TakerBuyBaseVolume.Set(takerBuyBaseVolume),
 		db.Kline.TakerBuyQuoteVolume.Set(takerBuyQuoteVolume),
+		db.Kline.Meta.Set(metaJson),
 	).Exec(ctx)
 
 	if err != nil {
@@ -53,7 +82,7 @@ func BtcUsdt (kline *binance.WsKline, client *db.PrismaClient, ctx context.Conte
 	log.Print("Kline created: ", created.ID)
 }
 
-func findOrCreatePair(client *db.PrismaClient, ctx context.Context, symbol db.ValidPair) (string, error) {
+func findOrCreatePair(ctx context.Context, client *db.PrismaClient, symbol db.ValidPair) (string, error) {
 	pair, err := client.Pair.FindFirst(
 		db.Pair.Symbol.Equals(symbol),
 	).Exec(ctx)
