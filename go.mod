@@ -9,7 +9,7 @@ require (
 	github.com/shopspring/decimal v1.3.1
 	github.com/steebchen/prisma-client-go v0.21.0
 	github.com/takuoki/gocase v1.1.1
-	golang.org/x/text v0.12.0
+	golang.org/x/text v0.13.0
 )
 
 require (
