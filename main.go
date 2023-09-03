@@ -55,7 +55,6 @@ func main() {
 		if (event.Kline.IsFinal) {
 			switch (event.Symbol) {
 				case string(BTCUSDT):
-					fmt.Println("Seq", btcBaseMA.Sequential);
 					pairs.BtcUsdt(ctx, &event.Kline, &btcBaseMA, &btcQuoteMA, client)
 				// case string(ETHUSDT):
 				// 	pairs.EthUsdt(&event.Kline)
