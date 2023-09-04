@@ -2,4 +2,5 @@
 .env.development
 docker-*.sh
 push-db*
+*-container.sh
 binance-websocket-feed-go
