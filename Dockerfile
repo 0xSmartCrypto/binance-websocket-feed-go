@@ -7,7 +7,7 @@ LABEL maintainer="0xSmartCrypto <0xSmartCrypto@gmail.com>"
 WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
-RUN go mod download
+# RUN go mod download
 
 COPY . ./
 
