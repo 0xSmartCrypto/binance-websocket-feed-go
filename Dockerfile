@@ -1,5 +1,4 @@
-# Start with an Ubuntu base image
-FROM golang:1.20
+FROM --platform=linux/amd64 golang:1.20
 
 # Maintainer info
 LABEL maintainer="0xSmartCrypto <0xSmartCrypto@gmail.com>"
