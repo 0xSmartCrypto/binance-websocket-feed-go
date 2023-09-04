@@ -11,11 +11,11 @@ RUN go mod download
 
 COPY . ./
 
-# generate db client
-RUN go run github.com/steebchen/prisma-client-go generate
+# # generate db client
+# RUN go run github.com/steebchen/prisma-client-go generate
 
-# Build the Go application
-RUN go build
+# # Build the Go application
+# RUN env GOOS=linux GOARCH=amd64 go build
 
-# Set the entry point to run the app
-ENTRYPOINT ["/app/binance-websocket-feed-go"]
+# # Set the entry point to run the app
+# ENTRYPOINT ["/app/binance-websocket-feed-go"]
