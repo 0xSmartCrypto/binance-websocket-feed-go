@@ -4,6 +4,8 @@ docker-*
 
 push-db-*
 
+update-container*
+
 .env
 .env.*
 
