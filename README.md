@@ -10,7 +10,7 @@ A price and feature detector written in Go 1.20.
 docker build -t feature-server .
 ```
 
-### Tag the image and push to Google Artifacts Registry
+### Tag the image and push to Google Artifact Registry
 
 ```bash
 docker tag feature-server:latest asia.gcr.io/binance-websocket-feed-go/feature-server
