@@ -7,15 +7,15 @@ LABEL maintainer="0xSmartCrypto <0xSmartCrypto@gmail.com>"
 WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
-# RUN go mod download
-
 COPY . ./
 
-# # generate db client
-# RUN go run github.com/steebchen/prisma-client-go generate
+RUN go mod download
 
-# # Build the Go application
-# RUN env GOOS=linux GOARCH=aarch64 go build
+# generate db client
+RUN go run github.com/steebchen/prisma-client-go generate
 
-# # Set the entry point to run the app
-# ENTRYPOINT ["/app/binance-websocket-feed-go"]
+# Build the Go application
+RUN go build
+
+# Set the entry point to run the app
+ENTRYPOINT ["/app/binance-websocket-feed-go"]
