@@ -1,0 +1,5 @@
+.env.production
+.env.development
+docker-*.sh
+push-db*
+binance-websocket-feed-go

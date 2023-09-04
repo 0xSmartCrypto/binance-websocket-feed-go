@@ -12,7 +12,7 @@ RUN go mod download
 COPY . ./
 
 # Build the Go application
-RUN go build -o /app/binance-websocket-feed-go
+# RUN go build
 
 # Set the entry point to run the app
-ENTRYPOINT ["/app/binance-websocket-feed-go"]
+# ENTRYPOINT ["/app/binance-websocket-feed-go"]
