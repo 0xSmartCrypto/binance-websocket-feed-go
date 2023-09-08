@@ -4,7 +4,7 @@ A price and feature detector written in Go 1.20.
 
 ## Overview
 
-Currently, the Feature Server subscribes to Binance's websocket feed for BTC/USDT on 1m candles. It calculates the following features and stores them in a MySQL database (PlanetScale):
+Currently, the Feature Server subscribes to Binance's websocket feed for BTC/USDT on 5m candles. It calculates the following features and stores them in a MySQL database (PlanetScale):
 
 - OHLC
 - Volume

@@ -71,9 +71,9 @@ func main() {
 	fmt.Println("Subscribing to Binance Websocket Feed ...")
 	
 	symbolIntervalMap := make(map[string]string)
-	symbolIntervalMap[string(BTCUSDT)] = "1m"
-	// symbolIntervalMap[string(ETHUSDT)] = "1m"
-	// symbolIntervalMap[string(XRPUSDT)] = "1m"
+	symbolIntervalMap[string(BTCUSDT)] = "5m"
+	// symbolIntervalMap[string(ETHUSDT)] = "5m"
+	// symbolIntervalMap[string(XRPUSDT)] = "5m"
 
 	doneC, _, err := binance.WsCombinedKlineServe(
 		symbolIntervalMap,
